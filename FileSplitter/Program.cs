@@ -17,6 +17,14 @@ namespace FileSplitter
                 var inputFolder = ConfigurationManager.AppSettings["inputFolder"];
                 var outputFolder = ConfigurationManager.AppSettings["outputFolder"];
                 var searchPattern = ConfigurationManager.AppSettings["searchPattern"];
+
+                Console.WriteLine("Input folder: " + inputFolder);
+
+                Console.WriteLine("Output folder: " + outputFolder);
+
+                Console.WriteLine("Search pattern: " + searchPattern);
+
+
                 var files = Directory.GetFiles(inputFolder, searchPattern);
 
                 if (!Directory.Exists(outputFolder))
@@ -36,9 +44,12 @@ namespace FileSplitter
                     }
                     var header = lines[0];
 
-                    using (var outputFile1 = File.CreateText(outputFolder + "\\1" + Path.GetFileName(file)))
+                    var splittedName = Path.GetFileName(file).Split('.');
+                    var filename = splittedName[0];
+
+                    using (var outputFile1 = File.CreateText(outputFolder + "\\" + filename + "-1.csv"))
                     {
-                        using (var outputFile2 = File.CreateText(outputFolder + "\\2" + Path.GetFileName(file)))
+                        using (var outputFile2 = File.CreateText(outputFolder + "\\" + filename + "-2.csv"))
                         {
                             outputFile1.WriteLine(header);
                             outputFile2.WriteLine(header);
@@ -55,8 +66,8 @@ namespace FileSplitter
                             }
                         }
                     }
-                    Console.WriteLine("Created file: " + outputFolder + "\\1" + Path.GetFileName(file));
-                    Console.WriteLine("Created file: " + outputFolder + "\\2" + Path.GetFileName(file));
+                    Console.WriteLine("Created file: " + outputFolder + "\\" + filename + "-1.csv");
+                    Console.WriteLine("Created file: " + outputFolder + "\\" + filename + "-2.csv");
                 }
             }
             catch (Exception ex)
